@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>JAXN BLACK CARD &mdash; Jaxn</title>
+<meta name="description" content="JAXN BLACK CARD — An Introduction Beyond Ordinary. Jaxn, Founder | Entrepreneur." />
+<meta name="theme-color" content="#080808" />
+<meta property="og:title" content="JAXN BLACK CARD — Jaxn" />
+<meta property="og:description" content="An Introduction Beyond Ordinary. The right connections change everything." />
+<meta property="og:type" content="website" />
+<link rel="icon" href="jaxn-card.PNG" />
+<link rel="preload" as="image" href="jaxn-card.PNG" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+  :root{
+    --black:#080808;
+    --black-2:#121212;
+    --gold:#C6A568;
+    --champagne:#E1C58A;
+    --gold-muted:#8D754D;
+    --ivory:#F4F0E8;
+    --text-2:#A8A39A;
+    --serif:'Cormorant Garamond',Georgia,serif;
+    --sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+    --ease:cubic-bezier(.22,.8,.24,1);
+  }
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--black);color:var(--ivory);
+    font-family:var(--sans);font-weight:300;
+    -webkit-tap-highlight-color:transparent;
+    -webkit-font-smoothing:antialiased;
+  }
+  body.locked{overflow:hidden;}
+  ::selection{background:rgba(198,165,104,.35);}
+  img{display:block;max-width:100%;}
+  a{color:inherit;}
+
+  /* ambient card-art backdrop */
+  .bg-art{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:url('jaxn-card.PNG') center center/cover no-repeat;
+    filter:brightness(.30);
+  }
+  .bg-scrim{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:linear-gradient(180deg,
+      rgba(8,8,8,.88) 0%,rgba(8,8,8,.30) 26%,
+      rgba(8,8,8,.44) 55%,rgba(8,8,8,.94) 82%,#080808 100%);
+  }
+
+  .foil-text{
+    background:linear-gradient(105deg,#8D754D 0%,#C6A568 28%,#E1C58A 50%,#C6A568 72%,#8D754D 100%);
+    background-size:220% auto;
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .label{
+    font-size:11px;letter-spacing:.42em;text-indent:.42em;text-transform:uppercase;
+    color:var(--gold-muted);font-weight:500;
+  }
+  .hairline{
+    height:1px;border:0;margin:0;
+    background:linear-gradient(90deg,transparent,rgba(198,165,104,.55),transparent);
+  }
+
+  /* ================= INTRO ================= */
+  #intro{
+    position:fixed;inset:0;z-index:60;background:#050505;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:24px;overflow:hidden;
+  }
+  #intro.done{display:none;}
+  .intro-stage{position:relative;width:min(400px,84vw);perspective:1400px;}
+  .intro-light{
+    position:absolute;left:50%;top:50%;width:min(440px,78vw);height:2px;
+    transform:translate(-50%,-50%) scaleX(0);opacity:0;
+    background:linear-gradient(90deg,transparent,#C6A568 30%,#E1C58A 50%,#C6A568 70%,transparent);
+    filter:blur(1px);
+  }
+  .intro-light::after{
+    content:"";position:absolute;left:10%;right:10%;top:-40px;bottom:-40px;
+    background:radial-gradient(closest-side,rgba(198,165,104,.16),transparent);
+    filter:blur(6px);
+  }
+  .intro-card{
+    position:relative;opacity:0;transform-style:preserve-3d;
+    border-radius:10px;overflow:hidden;
+    filter:drop-shadow(0 30px 60px rgba(0,0,0,.8));
+  }
+  .intro-card img{width:100%;}
+  .intro-sheen{
+    position:absolute;top:-12%;bottom:-12%;width:45%;left:0;pointer-events:none;
+    background:linear-gradient(105deg,transparent,rgba(225,197,138,.30),transparent);
+  }
+  .intro-brand{margin-top:38px;text-align:center;opacity:0;}
+  .intro-brand .t{
+    font-family:var(--serif);font-weight:600;font-size:26px;
+    letter-spacing:.34em;text-indent:.34em;color:var(--ivory);
+  }
+  .intro-brand .s{
+    margin-top:12px;font-family:var(--serif);font-style:italic;font-size:17px;
+    color:var(--text-2);letter-spacing:.04em;
+  }
+  #skipIntro{
+    position:absolute;top:calc(20px + env(safe-area-inset-top));right:22px;
+    background:none;border:0;cursor:pointer;opacity:0;
+    font-family:var(--sans);font-size:11px;letter-spacing:.32em;text-indent:.32em;
+    text-transform:uppercase;color:var(--gold-muted);padding:10px 4px;
+  }
+  #skipIntro:hover{color:var(--champagne);}
+  #skipIntro:focus-visible{outline:1px solid var(--gold);outline-offset:4px;}
+
+  /* ================= PROFILE ================= */
+  #profile{opacity:0;position:relative;z-index:1;}
+  #profile.ready{opacity:1;transition:opacity .6s ease;}
+  .wrap{width:min(480px,100%);margin:0 auto;padding:0 22px;}
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:calc(18px + env(safe-area-inset-top)) 0 14px;
+  }
+  .topbar .brand{font-size:11px;letter-spacing:.4em;text-indent:.1em;color:var(--ivory);font-weight:500;}
+  .topbar .mark{
+    width:9px;height:9px;transform:rotate(45deg);flex:0 0 9px;
+    border:1px solid var(--gold);
+  }
+
+  .hero{padding:26px 0 8px;perspective:1200px;margin:0 -22px;}
+  .card-frame{
+    position:relative;border-radius:0;transform-style:preserve-3d;
+    border-top:1px solid rgba(198,165,104,.45);
+    border-bottom:1px solid rgba(198,165,104,.45);
+    box-shadow:0 30px 70px rgba(0,0,0,.65);
+    transition:transform .5s var(--ease);
+    will-change:transform;
+  }
+  .card-frame img{border-radius:0;width:100%;}
+  .card-glare{
+    position:absolute;inset:0;border-radius:0;pointer-events:none;opacity:0;
+    background:radial-gradient(420px circle at var(--gx,50%) var(--gy,50%),
+      rgba(225,197,138,.20),rgba(225,197,138,.05) 42%,transparent 68%);
+    mix-blend-mode:soft-light;transition:opacity .4s ease;
+  }
+  .card-frame.lit .card-glare{opacity:1;}
+  .card-caption{
+    margin-top:14px;text-align:center;
+    font-size:10px;letter-spacing:.36em;text-indent:.36em;text-transform:uppercase;
+    color:var(--gold-muted);
+  }
+
+  .identity{text-align:center;padding:34px 0 6px;}
+  .identity h1{
+    font-family:var(--serif);font-weight:600;font-size:44px;line-height:1.05;
+    letter-spacing:.06em;margin:0 0 10px;color:var(--ivory);
+  }
+  .identity .role{
+    font-size:12px;letter-spacing:.34em;text-indent:.34em;text-transform:uppercase;
+    color:var(--gold);font-weight:500;margin:0 0 16px;
+  }
+  .identity .line{
+    font-family:var(--serif);font-style:italic;font-size:19px;color:var(--text-2);margin:0;
+  }
+  .identity .rule{margin:26px auto 0;max-width:220px;}
+
+  .actions{display:flex;flex-direction:column;gap:12px;padding:30px 0 6px;}
+  .btn{
+    display:flex;align-items:center;gap:16px;width:100%;
+    padding:17px 18px;border-radius:12px;text-decoration:none;cursor:pointer;
+    background:linear-gradient(180deg,#161616,#0e0e0e);
+    border:1px solid rgba(198,165,104,.32);
+    color:var(--ivory);font-family:var(--sans);
+    transition:border-color .3s var(--ease),transform .18s var(--ease),box-shadow .3s var(--ease),background .3s;
+    text-align:left;
+  }
+  .btn:hover,.btn:focus-visible{
+    border-color:rgba(225,197,138,.85);
+    box-shadow:0 10px 30px rgba(0,0,0,.5),inset 0 0 0 1px rgba(225,197,138,.25);
+    transform:translateY(-1px);outline:none;
+  }
+  .btn:active{transform:translateY(0) scale(.995);}
+  .btn .ic{
+    width:42px;height:42px;flex:0 0 42px;border-radius:50%;
+    border:1px solid rgba(198,165,104,.45);
+    display:flex;align-items:center;justify-content:center;color:var(--gold);
+  }
+  .btn .ic svg{width:20px;height:20px;}
+  .btn .tx{flex:1;min-width:0;}
+  .btn .tx b{display:block;font-weight:500;font-size:14px;letter-spacing:.16em;text-transform:uppercase;}
+  .btn .tx span{display:block;font-size:12px;color:var(--text-2);margin-top:4px;letter-spacing:.03em;}
+  .btn .ar{
+    color:var(--gold);font-size:20px;font-weight:300;line-height:1;
+    transition:transform .3s var(--ease);
+  }
+  .btn:hover .ar{transform:translateX(4px);}
+
+  .ventures{padding:44px 0 8px;}
+  .ventures h2{
+    font-family:var(--serif);font-weight:600;font-size:30px;letter-spacing:.04em;
+    margin:0 0 6px;color:var(--ivory);text-align:center;
+  }
+  .ventures .lede{
+    text-align:center;font-family:var(--serif);font-style:italic;font-size:16px;
+    color:var(--text-2);margin:0 0 8px;
+  }
+  .ventures .rule{margin:20px auto;max-width:220px;}
+  .venture{
+    display:block;text-decoration:none;border:1px solid rgba(198,165,104,.22);
+    border-radius:12px;padding:20px;margin-top:14px;background:#0d0d0d;
+    transition:border-color .3s var(--ease),transform .2s var(--ease);
+  }
+  .venture:hover{border-color:rgba(225,197,138,.7);transform:translateY(-2px);}
+  .venture .v-name{
+    font-family:var(--serif);font-size:22px;font-weight:600;letter-spacing:.03em;
+    color:var(--ivory);margin:0 0 8px;
+  }
+  .venture .v-desc{font-size:13.5px;line-height:1.65;color:var(--text-2);margin:0 0 10px;}
+  .venture .v-link{
+    font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);font-weight:500;
+  }
+  .ventures-empty{
+    text-align:center;color:var(--text-2);font-family:var(--serif);font-style:italic;
+    font-size:17px;padding:18px 0 6px;
+  }
+
+  footer{padding:40px 0 calc(34px + env(safe-area-inset-bottom));text-align:center;}
+  footer .f-brand{font-size:11px;letter-spacing:.4em;text-indent:.4em;color:var(--ivory);font-weight:500;}
+  footer .f-tag{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--text-2);margin:10px 0 0;}
+  footer .f-copy{font-size:10px;letter-spacing:.24em;color:var(--gold-muted);margin:16px 0 0;text-transform:uppercase;}
+
+  /* scroll reveals */
+  .rv{opacity:0;transform:translateY(22px);transition:opacity .8s var(--ease),transform .8s var(--ease);}
+  .rv.in{opacity:1;transform:none;}
+  .rule-draw{transform:scaleX(0);transform-origin:center;transition:transform 1s var(--ease);}
+  .rv.in .rule-draw,.rule-draw.in{transform:scaleX(1);}
+
+  /* connect modal */
+  .modal{
+    position:fixed;inset:0;z-index:70;display:flex;align-items:flex-end;justify-content:center;
+    padding:0;visibility:hidden;opacity:0;transition:opacity .35s ease,visibility .35s;
+  }
+  .modal.open{visibility:visible;opacity:1;}
+  .modal .scrim{position:absolute;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(3px);}
+  .modal .sheet{
+    position:relative;width:min(480px,100%);max-height:88vh;overflow-y:auto;
+    background:#0e0e0e;border:1px solid rgba(198,165,104,.4);border-bottom:0;
+    border-radius:18px 18px 0 0;padding:30px 24px calc(30px + env(safe-area-inset-bottom));
+    transform:translateY(40px);transition:transform .4s var(--ease);
+  }
+  .modal.open .sheet{transform:none;}
+  .modal h3{font-family:var(--serif);font-size:26px;font-weight:600;margin:0 0 6px;letter-spacing:.03em;}
+  .modal .m-sub{font-size:13px;color:var(--text-2);margin:0 0 20px;line-height:1.6;}
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-muted);margin-bottom:8px;font-weight:500;}
+  .field input,.field textarea{
+    width:100%;box-sizing:border-box;background:#080808;color:var(--ivory);
+    border:1px solid rgba(198,165,104,.3);border-radius:10px;
+    padding:13px 14px;font-family:var(--sans);font-size:15px;font-weight:300;
+  }
+  .field textarea{min-height:110px;resize:vertical;}
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--champagne);}
+  .m-actions{display:flex;gap:10px;margin-top:20px;}
+  .m-send{
+    flex:1;background:linear-gradient(120deg,#8D754D,#C6A568 45%,#E1C58A 55%,#C6A568);
+    border:0;border-radius:10px;padding:15px;cursor:pointer;
+    font-family:var(--sans);font-weight:600;font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:#0a0a0a;
+  }
+  .m-close{
+    background:none;border:1px solid rgba(198,165,104,.4);border-radius:10px;color:var(--ivory);
+    padding:15px 18px;cursor:pointer;font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-family:var(--sans);
+  }
+  .m-note{font-size:12px;color:var(--text-2);line-height:1.7;margin:16px 0 0;}
+  .m-note a{color:var(--gold);}
+  .m-x{
+    position:absolute;top:14px;right:16px;background:none;border:0;color:var(--gold-muted);
+    font-size:22px;cursor:pointer;padding:8px;line-height:1;
+  }
+
+  @media (min-width:640px){
+    .modal{align-items:center;padding:24px;}
+    .modal .sheet{border-radius:18px;border-bottom:1px solid rgba(198,165,104,.4);}
+    .identity h1{font-size:52px;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto;}
+    .rv{opacity:1;transform:none;transition:none;}
+    .rule-draw{transform:none;}
+  }
+</style>
+</head>
+<body class="locked">
+
+<div class="bg-art" aria-hidden="true"></div>
+<div class="bg-scrim" aria-hidden="true"></div>
+
+<!-- ============ CINEMATIC NFC INTRO ============ -->
+<div id="intro" role="presentation">
+  <button id="skipIntro" type="button">Skip Intro</button>
+  <div class="intro-stage">
+    <div class="intro-light" id="introLight"></div>
+    <div class="intro-card" id="introCard">
+      <img src="jaxn-card.PNG" alt="" />
+      <div class="intro-sheen" id="introSheen"></div>
+    </div>
+  </div>
+  <div class="intro-brand" id="introBrand">
+    <div class="t">JAXN BLACK CARD</div>
+    <div class="s">An Introduction Beyond Ordinary.</div>
+  </div>
+</div>
+
+<!-- ============ PROFILE ============ -->
+<main id="profile" aria-label="JAXN BLACK CARD digital profile">
+  <div class="wrap">
+    <header class="topbar">
+      <span class="brand">JAXN BLACK CARD</span>
+      <span class="mark" aria-hidden="true"></span>
+    </header>
+
+    <section class="hero rv" aria-label="JAXN BLACK CARD">
+      <div class="card-frame" id="cardFrame">
+        <img src="jaxn-card.PNG" alt="JAXN BLACK CARD — matte black card with gold JX monogram" />
+        <div class="card-glare" id="cardGlare"></div>
+      </div>
+      <p class="card-caption">Member Card &mdash; NFC Enabled</p>
+    </section>
+
+    <section class="identity rv">
+      <h1>Jaxn</h1>
+      <p class="role">Founder&nbsp;&nbsp;|&nbsp;&nbsp;Entrepreneur</p>
+      <p class="line">The right connections change everything.</p>
+      <hr class="hairline rule rule-draw" />
+    </section>
+
+    <nav class="actions rv" aria-label="Contact and networking">
+      <button class="btn" type="button" id="btnSave">
+        <span class="ic" data-icon="contact"></span>
+        <span class="tx"><b>Save Contact</b><span>Jaxn &mdash; add to your phone</span></span>
+        <span class="ar" aria-hidden="true">&rsaquo;</span>
+      </button>
+      <button class="btn" type="button" id="btnVentures">
+        <span class="ic" data-icon="ventures"></span>
+        <span class="tx"><b>My Ventures</b><span>Businesses &amp; brands</span></span>
+        <span class="ar" aria-hidden="true">&rsaquo;</span>
+      </button>
+      <a class="btn" id="btnInsta" href="https://www.instagram.com/jaxnblackcard/" target="_blank" rel="noopener">
+        <span class="ic" data-icon="instagram"></span>
+        <span class="tx"><b>JAXN Instagram</b><span>@jaxnblackcard</span></span>
+        <span class="ar" aria-hidden="true">&rsaquo;</span>
+      </a>
+      <a class="btn" id="btnPreorder" href="pricing.html">
+        <span class="ic" data-icon="preorder"></span>
+        <span class="tx"><b>Pre Order</b><span>Reserve your JAXN Black Card</span></span>
+        <span class="ar" aria-hidden="true">&rsaquo;</span>
+      </a>
+      <button class="btn" type="button" id="btnConnect">
+        <span class="ic" data-icon="connect"></span>
+        <span class="tx"><b>Connect With Me</b><span>Start a conversation</span></span>
+        <span class="ar" aria-hidden="true">&rsaquo;</span>
+      </button>
+    </nav>
+
+    <section class="ventures rv" id="ventures" aria-label="My ventures">
+      <h2>Beyond the Introduction.</h2>
+      <p class="lede">The work behind the card.</p>
+      <hr class="hairline rule rule-draw" />
+      <div id="ventureList"></div>
+    </section>
+
+    <footer class="rv">
+      <div class="f-brand">JAXN BLACK CARD</div>
+      <p class="f-tag">An Introduction Beyond Ordinary.</p>
+      <p class="f-copy">&copy; <span id="year"></span> JAXN Black Card</p>
+    </footer>
+  </div>
+</main>
+
+<!-- ============ CONNECT MODAL ============ -->
+<div class="modal" id="connectModal" role="dialog" aria-modal="true" aria-labelledby="connectTitle" aria-hidden="true">
+  <div class="scrim" data-close></div>
+  <div class="sheet">
+    <button class="m-x" type="button" data-close aria-label="Close">&times;</button>
+    <h3 id="connectTitle">Connect With Me</h3>
+    <p class="m-sub">Introduce yourself — every message is read personally.</p>
+    <form id="connectForm" novalidate>
+      <div class="field">
+        <label for="cfName">Your name</label>
+        <input id="cfName" name="name" type="text" autocomplete="name" required />
+      </div>
+      <div class="field">
+        <label for="cfEmail">Your email</label>
+        <input id="cfEmail" name="email" type="email" autocomplete="email" required />
+      </div>
+      <div class="field">
+        <label for="cfMsg">Message</label>
+        <textarea id="cfMsg" name="message" required></textarea>
+      </div>
+      <div class="m-actions">
+        <button class="m-send" type="submit">Send</button>
+        <button class="m-close" type="button" data-close>Close</button>
+      </div>
+      <p class="m-note" id="connectNote"></p>
+    </form>
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   CENTRAL CONFIGURATION — edit everything personal here.
+   ================================================================ */
+const CONFIG = {
+  name: "Jaxn",
+  title: "Founder / Entrepreneur",
+  brand: "JAXN BLACK CARD",
+  tagline: "The right connections change everything.",
+  introLine: "An Introduction Beyond Ordinary.",
+  instagram: "https://www.instagram.com/jaxnblackcard/",
+  instagramHandle: "@jaxnblackcard",
+  contactEmail: "jaxnblkcard@gmail.com",   // inbox for the Connect With Me form
+
+  /* Ventures — add / remove / edit freely. Nothing is invented for you:
+     each entry needs a real name, a real description, and a real link. */
+  ventures: [
+    // { name: "Venture Name",
+    //   description: "One or two honest sentences about the business.",
+    //   url: "https://…" },
+  ]
+};
+
+/* ---------- icons (stroke = currentColor) ---------- */
+const ICONS = {
+  contact: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="8.6" cy="11" r="2"/><path d="M5.4 16.4c.6-1.7 1.8-2.6 3.2-2.6s2.6.9 3.2 2.6"/><path d="M14.5 9.5h4M14.5 12.5h4"/></svg>',
+  ventures: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7.5 4.5v9L12 21l-7.5-4.5v-9z"/><path d="M12 12l7.5-4.5M12 12L4.5 7.5M12 12v9"/></svg>',
+  instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="16.8" cy="7.2" r="1.1" fill="currentColor" stroke="none"/></svg>',
+  connect: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-8 8H4l2-3a8 8 0 1 1 15-5z"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01"/></svg>',
+  preorder: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10.5h18"/><path d="M6.5 15h4"/></svg>'
+};
+document.querySelectorAll('[data-icon]').forEach(el => {
+  el.innerHTML = ICONS[el.dataset.icon] || '';
+});
+
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const hasGsap = typeof window.gsap !== 'undefined';
+
+/* ---------- Save Contact → real .vcf download ---------- */
+function downloadVCard(){
+  const lines = [
+    'BEGIN:VCARD',
+    'VERSION:3.0',
+    'FN:' + CONFIG.name,
+    'N:;Jaxn;;;',
+    'TITLE:' + CONFIG.title,
+    'ORG:' + CONFIG.brand,
+    'EMAIL;TYPE=INTERNET:' + CONFIG.contactEmail,
+    'URL:' + CONFIG.instagram,
+    'NOTE:' + CONFIG.introLine + ' ' + CONFIG.tagline,
+    'END:VCARD'
+  ];
+  const blob = new Blob([lines.join('\r\n')], { type: 'text/vcard;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'jaxn.vcf';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 800);
+}
+document.getElementById('btnSave').addEventListener('click', downloadVCard);
+
+/* ---------- Ventures ---------- */
+function renderVentures(){
+  const list = document.getElementById('ventureList');
+  if (!CONFIG.ventures.length){
+    list.innerHTML = '<p class="ventures-empty">The portfolio is being curated.</p>';
+    return;
+  }
+  CONFIG.ventures.forEach(v => {
+    const a = document.createElement('a');
+    a.className = 'venture';
+    a.href = v.url;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    const h = document.createElement('p'); h.className = 'v-name'; h.textContent = v.name;
+    const d = document.createElement('p'); d.className = 'v-desc'; d.textContent = v.description;
+    const l = document.createElement('span'); l.className = 'v-link'; l.textContent = 'Visit  →';
+    a.append(h, d, l);
+    list.appendChild(a);
+  });
+}
+renderVentures();
+document.getElementById('btnVentures').addEventListener('click', () => {
+  document.getElementById('ventures').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+});
+
+/* ---------- Connect modal ---------- */
+const modal = document.getElementById('connectModal');
+const note = document.getElementById('connectNote');
+function openModal(){
+  note.innerHTML = CONFIG.contactEmail
+    ? 'Your message opens in your email app, addressed to ' + CONFIG.brand + '.'
+    : 'Direct messaging activates once the cardholder links an inbox. ' +
+      'For now, the fastest connection is <a href="' + CONFIG.instagram + '" target="_blank" rel="noopener">Instagram ' + CONFIG.instagramHandle + '</a>.';
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
+  setTimeout(() => document.getElementById('cfName').focus(), 120);
+}
+function closeModal(){
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden', 'true');
+}
+document.getElementById('btnConnect').addEventListener('click', openModal);
+modal.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', closeModal));
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+document.getElementById('connectForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const name = document.getElementById('cfName').value.trim();
+  const email = document.getElementById('cfEmail').value.trim();
+  const msg = document.getElementById('cfMsg').value.trim();
+  if (!name || !email || !msg){
+    note.textContent = 'Please complete your name, email and message.';
+    return;
+  }
+  if (!CONFIG.contactEmail){
+    note.innerHTML = 'Thanks, ' + name.split(' ')[0] +
+      ' — direct messaging is not linked yet. Reach out on <a href="' + CONFIG.instagram +
+      '" target="_blank" rel="noopener">Instagram ' + CONFIG.instagramHandle + '</a> for the fastest reply.';
+    return;
+  }
+  const subject = encodeURIComponent('JAXN BLACK CARD — message from ' + name);
+  const body = encodeURIComponent(msg + '\n\n— ' + name + ' (' + email + ')');
+  window.location.href = 'mailto:' + CONFIG.contactEmail + '?subject=' + subject + '&body=' + body;
+  closeModal();
+});
+
+/* ---------- cinematic intro ---------- */
+const intro = document.getElementById('intro');
+const profile = document.getElementById('profile');
+let seen = false;
+try { seen = !!sessionStorage.getItem('jaxn_intro_seen'); } catch (err) {}
+
+function finishIntro(){
+  try { sessionStorage.setItem('jaxn_intro_seen', '1'); } catch (err) {}
+  intro.classList.add('done');
+  document.body.classList.remove('locked');
+  profile.classList.add('ready');
+  initReveals();
+}
+
+function playIntro(){
+  const skip = document.getElementById('skipIntro');
+  if (reduceMotion || !hasGsap){ finishIntro(); return; }
+
+  const tl = gsap.timeline({ defaults: { ease: 'power2.out' }, onComplete: finishIntro });
+  if (seen) tl.timeScale(2.4); // returning visitors get the short cut
+
+  tl.to('#skipIntro', { opacity: 1, duration: .4 }, .5)
+    // Phase 1 — the darkness: a thin gold light emerges
+    .to('#introLight', { opacity: 1, scaleX: 1, duration: .55, ease: 'power1.inOut' }, 0)
+    // Phase 2 — the card emerges
+    .to('#introCard', { opacity: 1, y: 0, scale: 1, rotationY: 0, duration: 1.15,
+        startAt: { y: 26, scale: 1.06, rotationY: -16 } }, .45)
+    .to('#introLight', { opacity: .25, duration: .8 }, .7)
+    // metallic highlight sweeps the card
+    .add(() => {
+      gsap.fromTo('#introSheen',
+        { xPercent: -170, skewX: -12 },
+        { xPercent: 540, skewX: -12, duration: .95, ease: 'power1.inOut' });
+    }, .95)
+    // Phase 3 — brand reveal
+    .to('#introBrand', { opacity: 1, y: 0, duration: .6, startAt: { y: 14 } }, 1.55)
+    // Phase 4 — transformation: card rises, intro dissolves into profile
+    .to('#introCard', { scale: .62, y: '-30vh', rotationY: 6, duration: .85, ease: 'power2.inOut' }, 2.15)
+    .to('#introBrand', { opacity: 0, y: -12, duration: .45 }, 2.2)
+    .to('#intro', { opacity: 0, duration: .5 }, 2.55);
+
+  skip.addEventListener('click', () => tl.progress(1), { once: true });
+}
+
+/* ---------- interactive card tilt + metallic glare ---------- */
+function initTilt(){
+  const frame = document.getElementById('cardFrame');
+  if (reduceMotion || !window.matchMedia('(pointer:fine)').matches) return;
+  let raf = null;
+  frame.addEventListener('pointermove', e => {
+    const r = frame.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width;
+    const py = (e.clientY - r.top) / r.height;
+    if (raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      const rx = (0.5 - py) * 14;
+      const ry = (px - 0.5) * 16;
+      frame.style.transform = 'rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg)';
+      frame.style.setProperty('--gx', (px * 100).toFixed(1) + '%');
+      frame.style.setProperty('--gy', (py * 100).toFixed(1) + '%');
+      frame.classList.add('lit');
+    });
+  });
+  frame.addEventListener('pointerleave', () => {
+    if (raf) cancelAnimationFrame(raf);
+    frame.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    frame.classList.remove('lit');
+  });
+}
+
+/* ---------- scroll reveals ---------- */
+function initReveals(){
+  const els = document.querySelectorAll('.rv');
+  if (reduceMotion || !('IntersectionObserver' in window)){
+    els.forEach(el => el.classList.add('in'));
+    return;
+  }
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
+    });
+  }, { threshold: .12 });
+  els.forEach(el => io.observe(el));
+}
+
+document.getElementById('year').textContent = new Date().getFullYear();
+playIntro();
+initTilt();
+</script>
+</body>
+</html>
